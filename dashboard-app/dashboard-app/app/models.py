@@ -39,3 +39,12 @@ class Producto(Model):
     
     def __repr__(self):
         return  self.nombre
+
+class Venta (Model):
+    __tablename__="venta"
+    id = Column(Integer, primary_key=True)
+    producto = Column(String(150), nullable=False)
+    cantidad = Column(Integer, nullable=False)
+    precio_unitario = Column(Numeric(10, 2), nullable=True)
+    total = Column(Numeric(10, 2), nullable=True)
+    fecha = Column(DateTime, default=datetime.datetime.utcnow, onupdate= datetime.UTC, nullable=False)
