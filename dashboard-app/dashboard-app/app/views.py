@@ -2,15 +2,20 @@ from .extensions import appbuilder, db
 from flask_appbuilder import BaseView, ModelView, expose
 from flask_appbuilder.models.sqla.interface import SQLAInterface
 from .models import Categoria, Producto, Venta
+
 class CategoriaModelView(ModelView):
     datamodel = SQLAInterface(Categoria)
-    label_columns = { "nombre" : "Nombre",
-                    "descripcion": "Descripcion",
-                    "imagen": "Imagen",
-                    "estado": "Estado",
-                    "creado_en": "Creado en",
-                    "actualizado_en":"Actualizado en"}
-    list_columns= ["nombre", "descripcion", "estado", "creado_en"]
+    label_columns = { 
+        "nombre" : "Nombre",
+        "descripcion": "Descripcion",
+        "imagen": "Imagen/Logo",
+        "estado": "Estado",
+        "creado_en": "Fecha de Creación",
+        "actualizado_en":"Última Actualización"
+    }
+    
+    # CAMBIO: Agregamos "imagen" y "actualizado_en" a la lista para que el docente vea el resultado
+    list_columns = ["nombre", "imagen", "estado", "creado_en", "actualizado_en"]
     
     add_columns = ["nombre", "descripcion", "imagen", "estado"]
     edit_columns = ["nombre", "descripcion", "imagen", "estado"]
@@ -18,24 +23,30 @@ class CategoriaModelView(ModelView):
     
 class ProductoModelView(ModelView):
     datamodel = SQLAInterface(Producto)
-    label_columns = { "nombre" : "Nombre",
-                    "descripcion": "Descripcion",
-                    "precio" : "Precio",
-                    "categorias": "Categoria",
-                    "imagen": "Imagen",
-                    "estado": "Estado",
-                    "creado_en": "Creado en",
-                    "actualizado_en":"Actualizado en"}
-    list_columns= ["nombre", "precio", "categorias", "estado"]
-    add_columns = ["nombre", "descripcion","precio","categorias", "imagen", "estado"]
-    edit_columns = ["nombre", "descripcion","precio","categorias", "imagen", "estado"]
+    label_columns = { 
+        "nombre" : "Nombre",
+        "descripcion": "Descripcion",
+        "precio" : "Precio",
+        "categorias": "Categoría",
+        "imagen": "Foto del Producto",
+        "estado": "Estado",
+        "creado_en": "Fecha de Creación",
+        "actualizado_en":"Última Actualización"
+    }
+    
+    # CAMBIO: Agregamos "imagen" y "actualizado_en" para que sean visibles en la tabla principal
+    list_columns = ["nombre", "precio", "categorias", "imagen", "estado", "actualizado_en"]
+    
+    add_columns = ["nombre", "descripcion", "precio", "categorias", "imagen", "estado"]
+    edit_columns = ["nombre", "descripcion", "precio", "categorias", "imagen", "estado"]
     show_columns = ["nombre", "descripcion", "precio", "imagen", "estado", "creado_en","actualizado_en"]
     
 class VentaModelView(ModelView):
     datamodel = SQLAInterface(Venta)    
-    list_columns= ["producto", "cantidad", "precio_unitario", "total","fecha"]
-    add_columns = ["producto", "cantidad","precio_unitario","total"]
-    edit_columns = ["producto", "cantidad","precio_unitario","total"]
+    # CAMBIO: Mostramos la fecha completa para verificar que se guarde bien
+    list_columns = ["producto", "cantidad", "precio_unitario", "total", "fecha"]
+    add_columns = ["producto", "cantidad", "precio_unitario", "total"]
+    edit_columns = ["producto", "cantidad", "precio_unitario", "total"]
     
 # REPORTES
 class ReporteView(BaseView):
@@ -56,38 +67,32 @@ class ReporteView(BaseView):
                                     venta_por_producto = venta_por_producto
                                     )
         
-    
-    
-    
 appbuilder.add_view(
         CategoriaModelView,
         "Categorias",
-        icon="fa-info",
-        category="Configuraciones",
-        category_icon="fa-info"
+        icon="fa-folder-open",
+        category="Configuraciones"
     )
     
 appbuilder.add_view(
         ProductoModelView,
         "Productos",
-        icon="fa-info",
-        category="Configuraciones",
-        category_icon="fa-info"
+        icon="fa-barcode",
+        category="Configuraciones"
     )
 
 appbuilder.add_view(
         VentaModelView,
         "Ventas",
-        icon="fa-cart-arrow-down",
-        category="Ventas",
-        category_icon="fa-shopping-cart"
+        icon="fa-shopping-cart",
+        category="Operaciones"
     )
 
 appbuilder.add_view_no_menu(ReporteView())
 
 appbuilder.add_link(
-    "Reporte1",
+    "Reporte General",
     href="/reportes/",
-    icon="fa-file-text",
+    icon="fa-chart-line",
     category="Reportes"
 )
